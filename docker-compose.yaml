@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  postgres_user:
+    image: postgres:latest
+    container_name: postgres_user_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: UserDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - user_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  postgres_auth:
+    image: postgres:latest
+    container_name: postgres_auth_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: AuthDb
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo_chat_db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - chat_data:/data/db
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  user_data:
+  auth_data:
+  chat_data:
