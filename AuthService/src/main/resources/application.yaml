@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: AuthService
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5433/AuthDb
+    username: admin
+    password: admin
+    driverClassName: org.postgresql.Driver
+
+
+jwt:
+  secret: 3282657c9b0575268776988029b05632e480fc4ec34080c229e06ff708cdb980
+
+
+server:
+  port: 8081
