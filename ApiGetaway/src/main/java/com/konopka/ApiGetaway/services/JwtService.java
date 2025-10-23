@@ -1,19 +1,14 @@
-package com.Konopka.AuthService.Services;
+package com.konopka.ApiGetaway.services;
 
-import com.Konopka.AuthService.Entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -21,28 +16,7 @@ public class JwtService {
 
     @Value("${jwt.secret}")
     private String jwt;
-    private final UserDetailsService userDetailsService;
 
-    public JwtService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    public String generateToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("userId", user.getId());
-
-        return Jwts
-                .builder()
-                .claims()
-                .add(claims)
-                .subject(user.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 30)  )
-                .and()
-                .signWith(getKey())
-                .compact();
-    }
 
     private SecretKey getKey() {
     byte[] keyBytes = Decoders.BASE64.decode(jwt);
@@ -66,9 +40,10 @@ public class JwtService {
                 .getPayload();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token) {
         final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final boolean isNotExpired = !isTokenExpired(token);
+        return (!userName.isEmpty() && isNotExpired);
     }
 
     private boolean isTokenExpired(String token) {
@@ -78,9 +53,6 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
-
-
 
 
 }

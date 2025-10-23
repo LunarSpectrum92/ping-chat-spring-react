@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -56,13 +58,17 @@ public class UserService {
 
 
     public String logIn(UserDto userDto) {
+        Optional<User> user = userRepository.findByUsername(userDto.username());
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("username not found");
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userDto.username(),
                         userDto.password()
                 ));
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(userDto);
+            return jwtService.generateToken(user.get());
         }else  {
             throw new BadCredentialsException("Bad credentials");
         }

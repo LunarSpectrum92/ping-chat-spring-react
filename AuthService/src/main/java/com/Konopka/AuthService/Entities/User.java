@@ -4,6 +4,8 @@ package com.Konopka.AuthService.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -20,6 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String password;
+
     @Column(unique = true, nullable = false)
     private String username;
 
