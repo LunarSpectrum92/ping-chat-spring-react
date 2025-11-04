@@ -26,17 +26,14 @@ public class ChatController {
         this.chatService = chatService;
         this.messagingTemplate = messagingTemplate;
     }
-//
-//,
-//    Principal user,
-//    @Header("simpSessionId") String sessionId
-    @MessageMapping("/private-message")
-    public ChatMessage handlePrivateMessage(  @Payload ChatMessage message
-    ) {
 
-        messagingTemplate.convertAndSendToUser(message.getRecipient(),"/private", message);
-        System.out.println(message);
-        return message;
+
+    @MessageMapping("/private-message")
+    public ChatMessage handlePrivateMessage(
+            @Payload ChatMessage message,
+            Principal principal
+    ) {
+        return chatService.sendPrivateMessage(message, principal);
     }
 
 

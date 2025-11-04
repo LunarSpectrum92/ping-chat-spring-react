@@ -1,201 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Chat Client (STOMP)</title>
-    <!-- Load Tailwind CSS -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Private Chat (STOMP Demo)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load SockJS and STOMP Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <style>
-        /* Custom font for better look */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
 
-    <div id="chat-container" class="w-full max-w-lg bg-white shadow-2xl rounded-xl p-6 space-y-6">
+<div id="chat-container" class="w-full max-w-lg bg-white shadow-2xl rounded-xl p-6 space-y-6">
+    <h1 class="text-3xl font-bold text-gray-800 text-center">STOMP Private Chat (Test)</h1>
 
-        <h1 class="text-3xl font-bold text-gray-800 text-center">STOMP Private Chat</h1>
-
-        <!-- Connection Status & Controls -->
-        <div class="space-y-4 p-4 border border-gray-200 rounded-lg">
-            <h2 class="text-xl font-semibold text-gray-700">Connection Status</h2>
-            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                <input id="userId" type="text" placeholder="Your User ID (e.g., Alice)" class="flex-grow p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
-                <button id="connectButton" onclick="connect()" class="px-4 py-2 text-white bg-green-600 hover:bg-green-700 font-semibold rounded-lg shadow-md transition duration-150 ease-in-out w-full sm:w-auto">
-                    Connect
-                </button>
-                <button id="disconnectButton" onclick="disconnect()" class="px-4 py-2 text-white bg-red-600 hover:bg-red-700 font-semibold rounded-lg shadow-md transition duration-150 ease-in-out w-full sm:w-auto" disabled>
-                    Disconnect
-                </button>
-            </div>
-            <p id="status" class="text-sm font-medium">Status: <span id="connection-status" class="text-red-500">Disconnected</span></p>
+    <!-- Connection -->
+    <div class="p-4 border border-gray-200 rounded-lg space-y-3">
+        <h2 class="text-xl font-semibold text-gray-700">Connection</h2>
+        <input id="userId" type="text" placeholder="Your user ID (e.g. Alice)"
+               class="w-full p-2 border border-gray-300 rounded-lg shadow-sm" />
+        <div class="flex space-x-2">
+            <button id="connectButton" onclick="connect()"
+                    class="flex-1 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md">Connect</button>
+            <button id="disconnectButton" onclick="disconnect()"
+                    class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md" disabled>Disconnect</button>
         </div>
-
-        <!-- Message Sending Form -->
-        <div class="space-y-4 p-4 border border-gray-200 rounded-lg">
-            <h2 class="text-xl font-semibold text-gray-700">Send Private Message</h2>
-
-            <input id="recipientId" type="text" placeholder="Recipient User ID (e.g., Bob)" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" />
-
-            <textarea id="messageContent" rows="3" placeholder="Type your message content here..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm resize-none"></textarea>
-
-            <button id="sendButton" onclick="sendPrivateMessage()" class="w-full px-4 py-3 text-lg text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg shadow-xl transition duration-150 ease-in-out" disabled>
-                Send Message
-            </button>
-        </div>
-
-        <!-- Message Log -->
-        <div class="space-y-2">
-            <h2 class="text-xl font-semibold text-gray-700">Message & Log</h2>
-            <div id="messages" class="h-64 overflow-y-auto bg-gray-100 p-3 rounded-lg border border-gray-300 text-sm space-y-1">
-                <p class="text-gray-500">Awaiting connection...</p>
-            </div>
-        </div>
+        <p id="status">Status:
+            <span id="connection-status" class="text-red-500 font-semibold">Disconnected</span>
+        </p>
     </div>
 
-    <script>
-        // Set the server host (adjust if your Spring Boot app is running elsewhere)
-        const HOST = 'http://localhost:8082';
-        let stompClient = null;
+    <!-- Message form -->
+    <div class="p-4 border border-gray-200 rounded-lg space-y-3">
+        <h2 class="text-xl font-semibold text-gray-700">Send Private Message</h2>
+        <input id="recipientId" type="text" placeholder="Recipient user ID (e.g. Bob)"
+               class="w-full p-2 border border-gray-300 rounded-lg shadow-sm" />
+        <textarea id="messageContent" rows="3" placeholder="Type your message..."
+                  class="w-full p-2 border border-gray-300 rounded-lg shadow-sm resize-none"></textarea>
+        <button id="sendButton" onclick="sendPrivateMessage()"
+                class="w-full px-4 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md"
+                disabled>Send Message</button>
+    </div>
 
-        /**
-         * Utility to display log messages in the UI.r
-         * @paam {string} message - The message to log.
-         * @param {string} type - 'info', 'success', 'error', 'received'.
-         */
-        function log(message, type = 'info') {
-            const messagesDiv = document.getElementById('messages');
-            const p = document.createElement('p');
-            p.textContent = message;
+    <!-- Messages -->
+    <div class="space-y-2">
+        <h2 class="text-xl font-semibold text-gray-700">Logs & Messages</h2>
+        <div id="messages"
+             class="h-64 overflow-y-auto bg-gray-100 p-3 rounded-lg border border-gray-300 text-sm space-y-1">
+            <p class="text-gray-500">Awaiting connection...</p>
+        </div>
+    </div>
+</div>
 
-            let color = 'text-gray-700';
-            if (type === 'success') color = 'text-green-600 font-semibold';
-            if (type === 'error') color = 'text-red-600 font-semibold';
-            if (type === 'received') color = 'text-blue-600 bg-blue-50 p-1 rounded';
+<script>
+    const HOST = 'http://localhost:8082'; // zmień jeśli Twój backend działa na innym porcie
+    let stompClient = null;
 
-            p.className = color;
-            messagesDiv.appendChild(p);
-            // Scroll to the bottom
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    function log(message, type = 'info') {
+        const div = document.getElementById('messages');
+        const p = document.createElement('p');
+        let color = 'text-gray-700';
+        if (type === 'error') color = 'text-red-600 font-semibold';
+        if (type === 'success') color = 'text-green-600 font-semibold';
+        if (type === 'received') color = 'text-blue-600 bg-blue-50 p-1 rounded';
+        p.className = color;
+        p.textContent = message;
+        div.appendChild(p);
+        div.scrollTop = div.scrollHeight;
+    }
+
+    function setConnected(connected) {
+        const status = document.getElementById('connection-status');
+        const connectBtn = document.getElementById('connectButton');
+        const disconnectBtn = document.getElementById('disconnectButton');
+        const sendBtn = document.getElementById('sendButton');
+        const userInput = document.getElementById('userId');
+
+        if (connected) {
+            status.textContent = 'Connected';
+            status.className = 'text-green-500 font-semibold';
+            connectBtn.disabled = true;
+            disconnectBtn.disabled = false;
+            sendBtn.disabled = false;
+            userInput.disabled = true;
+        } else {
+            status.textContent = 'Disconnected';
+            status.className = 'text-red-500 font-semibold';
+            connectBtn.disabled = false;
+            disconnectBtn.disabled = true;
+            sendBtn.disabled = true;
+            userInput.disabled = false;
+        }
+    }
+
+    function connect() {
+        const userId = document.getElementById('userId').value.trim();
+        if (!userId) {
+            log('Enter your user ID before connecting.', 'error');
+            return;
         }
 
-        /**
-         * Updates the UI status and button states.
-         * @param {boolean} connected - Connection status.
-         */
-        function setConnected(connected) {
-            const statusSpan = document.getElementById('connection-status');
-            const connectBtn = document.getElementById('connectButton');
-            const disconnectBtn = document.getElementById('disconnectButton');
-            const sendBtn = document.getElementById('sendButton');
-            const userIdInput = document.getElementById('userId');
+        // 1. Create SockJS connection
+        const socket = new SockJS(`${HOST}/ws?authId=`+ userId +``);
+        stompClient = Stomp.over(socket);
 
-            if (connected) {
-                statusSpan.textContent = 'Connected';
-                statusSpan.className = 'text-green-500';
-                connectBtn.disabled = true;
-                disconnectBtn.disabled = false;
-                sendBtn.disabled = false;
-                userIdInput.disabled = true;
-            } else {
-                statusSpan.textContent = 'Disconnected';
-                statusSpan.className = 'text-red-500';
-                connectBtn.disabled = false;
-                disconnectBtn.disabled = true;
-                sendBtn.disabled = true;
-                userIdInput.disabled = false;
-            }
-        }
-
-
-        /**
-         * Establishes the WebSocket connection using SockJS and STOMP.
-         */
-        function connect() {
-            const userId = document.getElementById('userId').value.trim();
-            if (!userId) {
-                log('Please enter your User ID before connecting.', 'error');
-                return;
-            }
-
-            // 1. Establish the SockJS connection to the configured endpoint
-            const socket = new SockJS('http://localhost:8082/ms');
-            stompClient = Stomp.over(socket);
-
-            // 2. Connect to the STOMP server
-            stompClient.connect({}, (frame) => {
-                log(`Connected: ${frame}`, 'success');
+        // 2. Connect to STOMP
+        stompClient.connect(
+            { 'X-AuthId-Header': userId }, // symulacja nagłówka auth
+            (frame) => {
+                log('Connected: ' + frame, 'success');
                 setConnected(true);
 
-                // 3. Subscribe to the user's private message queue.
-                // The subscription destination is always '/    queue/private' (or whatever name the server uses).
-                // STOMP brokers automatically rewrite this to the user-specific queue based on the session ID.
-                // NOTE: We are using a generic private queue name: 'private'
-                stompClient.subscribe('/user/' + userId + '/private', (message) => {
-                    const receivedMsg = JSON.parse(message.body);
-                    log(`RECEIVED Private Message from ${receivedMsg.sender}: ${receivedMsg.content}`, 'received');
+                // 3. Subscribe to user private queue
+                stompClient.subscribe(`/user/${userId}/private`, (message) => {
+                    const msg = JSON.parse(message.body);
+                    log(`RECEIVED from ${msg.sender}: ${msg.content}`, 'received');
                 });
+            },
+            (error) => {
+                log('Connection error: ' + error, 'error');
+                setConnected(false);
+            }
+        );
+    }
 
-            }, (error) => {
-                log(`Connection Error: ${error}`, 'error');
+    function disconnect() {
+        if (stompClient) {
+            stompClient.disconnect(() => {
+                log('Disconnected.', 'info');
                 setConnected(false);
             });
         }
+    }
 
-        /**
-         * Closes the STOMP connection.
-         */
-        function disconnect() {
-            if (stompClient !== null) {
-                stompClient.disconnect(() => {
-                    log('Disconnected from the server.', 'info');
-                    setConnected(false);
-                });
-            }
+    function sendPrivateMessage() {
+        const sender = document.getElementById('userId').value.trim();
+        const recipient = document.getElementById('recipientId').value.trim();
+        const content = document.getElementById('messageContent').value.trim();
+
+        if (!recipient || !content) {
+            log('Recipient and message content are required.', 'error');
+            return;
         }
 
-        /**
-         * Sends a private message to the server via the @MessageMapping endpoint.
-         */
-        function sendPrivateMessage() {
-            if (!stompClient || !stompClient.connected) {
-                log('You must be connected to send a message.', 'error');
-                return;
-            }
+        const msg = { sender, recipient, content };
+        stompClient.send('/app/private-message', {}, JSON.stringify(msg));
+        log(`SENT to ${recipient}: ${content}`, 'info');
+        document.getElementById('messageContent').value = '';
+    }
 
-            const senderId = document.getElementById('userId').value.trim();
-            const recipientId = document.getElementById('recipientId').value.trim();
-            const content = document.getElementById('messageContent').value.trim();
-
-            if (!recipientId || !content) {
-                log('Recipient ID and Message Content are required.', 'error');
-                return;
-            }
-
-            // Create the message object (must match your ChatMessage class structure)
-            const chatMessage = {
-                sender: senderId,
-                recipient: recipientId, // Assuming ChatMessage has a 'recipient' field
-                content: content
-                // You may need other fields like messageType if used in ChatMessage
-            };
-
-            // Send the message to the application destination prefix /app + the message mapping
-            // -> /app/chat.sendPrivate
-            stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
-
-            log(`SENT Private Message to ${recipientId}: ${content}`, 'info');
-            document.getElementById('messageContent').value = ''; // Clear input
-        }
-
-        // Initialize UI state on load
-        setConnected(false);
-
-    </script>
+    setConnected(false);
+</script>
 </body>
 </html>

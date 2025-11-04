@@ -6,11 +6,10 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/mongodb_chat_db
-      password: admin
-      username: admin
-      authentication-database: admin
-
+      uri: mongodb://admin:admin@localhost:27017/mongodb_chat_db?authSource=admin
+#      password: admin
+#      username: admin
+#      authentication-database: admin
 
 server:
   port: 8082

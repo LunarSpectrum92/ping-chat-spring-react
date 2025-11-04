@@ -4,5 +4,6 @@
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0daa1234-1c9d-43e2-9316-2bdb829e85a1/console.sql" value="0daa1234-1c9d-43e2-9316-2bdb829e85a1" />
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/301ca2ea-80a8-409e-a479-47ecc2705156/console.sql" value="301ca2ea-80a8-409e-a479-47ecc2705156" />
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/f65f9b11-1600-4de6-b259-d91c65a89d42/console.js" value="f65f9b11-1600-4de6-b259-d91c65a89d42" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/f65f9b11-1600-4de6-b259-d91c65a89d42/console_1.js" value="f65f9b11-1600-4de6-b259-d91c65a89d42" />
   </component>
 </project>

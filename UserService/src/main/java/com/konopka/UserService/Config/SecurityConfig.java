@@ -17,21 +17,20 @@ public class SecurityConfig {
         this.authenticationFilter = authenticationFilter;
     }
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(
-                    requests -> requests
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        requests -> requests
+                                .anyRequest().permitAll()
+                )
+                    .addFilterBefore(authenticationFilter,
+                            UsernamePasswordAuthenticationFilter.class)
 
-                            .anyRequest().permitAll()
-            )
-//                .addFilterBefore(authenticationFilter,
-//                        UsernamePasswordAuthenticationFilter.class)
-
-         //   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .build();
-}
+             //   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
+    }
 
 
 
