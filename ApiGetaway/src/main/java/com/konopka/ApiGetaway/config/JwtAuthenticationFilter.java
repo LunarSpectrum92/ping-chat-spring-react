@@ -10,6 +10,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+
 import java.util.List;
 
 
@@ -31,6 +32,7 @@ public class JwtAuthenticationFilter implements WebFilter {
             String username = jwtService.extractUserName(token);
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     username, null, List.of());
+            exchange.getRequest().getHeaders().set("X-AuthId-Header", jwtService.extractUserId(token));
             return chain.filter(exchange).contextWrite(
                     ReactiveSecurityContextHolder.withAuthentication(auth));
         }

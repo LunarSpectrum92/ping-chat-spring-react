@@ -54,5 +54,8 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-
+    public String extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId").toString();
+    }
 }

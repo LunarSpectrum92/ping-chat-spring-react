@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: UserService
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/UserDb
+    username: admin
+    password: admin
+    driverClassName: org.postgresql.Driver
+
+
+
+
+
+Server:
+  port: 8082

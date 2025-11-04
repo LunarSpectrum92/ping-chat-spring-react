@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .addFilterAt(jwtAuthenticatonFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+
                 .build();
     }
 

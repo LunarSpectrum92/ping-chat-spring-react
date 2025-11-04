@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ChatService
+
+
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mongodb_chat_db
+      password: admin
+      username: admin
+      authentication-database: admin
+
+
+server:
+  port: 8082

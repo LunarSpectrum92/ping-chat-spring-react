@@ -2,7 +2,9 @@ package com.Konopka.AuthService.Services;
 
 
 import com.Konopka.AuthService.DTO.UserDto;
+import com.Konopka.AuthService.DTO.UserServiceUserDto;
 import com.Konopka.AuthService.Entities.User;
+import com.Konopka.AuthService.Feign.UserFeign;
 import com.Konopka.AuthService.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,38 +26,51 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserFeign userFeign;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService) {
+    public UserService(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService, UserFeign userFeign, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.userFeign = userFeign;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
 
 
 
     public boolean registerUser(UserDto userDto) {
 
         if (userRepository.findByUsername(userDto.username()).isPresent()) {
-            return false;
+            throw new IllegalArgumentException("Username already exists: " + userDto.username());
         }
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(userDto.password());
+        String encodedPassword = bCryptPasswordEncoder.encode(userDto.password());
 
         User user = User.builder()
                 .username(userDto.username())
                 .password(encodedPassword)
                 .build();
 
-        try{
-            userRepository.save(user);
-        }catch(Exception e){
-            throw new UsernameNotFoundException("username not found" + userDto.username());
+        User savedUser = userRepository.save(user);
+
+        try {
+            UserServiceUserDto userServiceUserDto = new UserServiceUserDto(
+                    savedUser.getId(),
+                    userDto.firstName(),
+                    userDto.lastName()
+            );
+            userFeign.createUser(userServiceUserDto);
+        } catch (Exception e) {
+            userRepository.delete(user);
+            throw new RuntimeException("Failed to create user in external service", e);
         }
 
         return true;
     }
+
 
 
     public String logIn(UserDto userDto) {
