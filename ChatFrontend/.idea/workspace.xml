@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bfcc4f97-490b-43c4-a89b-57550e4a4d34" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/config/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/config/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/services/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ApiGetaway/src/main/java/com/konopka/ApiGetaway/services/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ApiGetaway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../ApiGetaway/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Feign/UserFeign.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Feign/UserFeign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Services/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Services/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/java/com/Konopka/AuthService/Services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AuthService/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../AuthService/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Configurations/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Configurations/AuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Controllers/MessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Controllers/MessageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Entites/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Entites/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Pojo/ChatMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Pojo/ChatMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Repositories/MessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Repositories/MessageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Services/ChatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Services/ChatService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Services/MessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/java/com/konopka/ChatService/Services/MessageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ChatService/src/main/resources/static/nowy_6.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ChatService/src/main/resources/static/nowy_6.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Controllers/InvitationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Controllers/InvitationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Repositories/InvitationRepostitory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Repositories/InvitationRepostitory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Repositories/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Services/InvitationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Services/InvitationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserService/src/main/java/com/konopka/UserService/Services/UserService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="37fbhf5TIDQxGNAVbSflYaJqsRc" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.29346.143" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bfcc4f97-490b-43c4-a89b-57550e4a4d34" name="Changes" comment="" />
+      <created>1767297194975</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767297194975</updated>
+      <workItem from="1767297195697" duration="6000" />
+      <workItem from="1767808461576" duration="4000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

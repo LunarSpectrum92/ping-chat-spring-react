@@ -18,12 +18,16 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        System.out.println(httpRequest.getServletPath() + " " + httpRequest.getHeader("X-AuthId-Header"));
+
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        if (httpRequest.getRequestURI().startsWith("/ws") || httpRequest.getRequestURI().startsWith("/nowy_6.html") || true) {
-            chain.doFilter(request, response);
-           return;
-        }
+        // || httpRequest.getRequestURI().startsWith("/nowy_6.html") || true
+            if (httpRequest.getRequestURI().contains("/ws")) {
+                chain.doFilter(request, response);
+                return;
+            }
         String customHeader = httpRequest.getHeader("X-AuthId-Header");
+//        String customHeaderUserName = httpRequest.getHeader("X-AuthUserName-Header");
         System.out.println("customHeader: " + customHeader);
         if (customHeader == null || customHeader.isBlank()) {
             httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -34,6 +38,7 @@ public class AuthenticationFilter implements Filter {
                 null,
                 null
         );
+        System.out.println("authentication: " + authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }

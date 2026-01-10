@@ -28,19 +28,19 @@ public class UserHandshakeHandler extends DefaultHandshakeHandler {
 //    }
 
 
-    @Override
-    protected Principal determineUser(ServerHttpRequest request,
-                                      WebSocketHandler wsHandler,
-                                      Map<String, Object> attributes) {
+        @Override
+        protected Principal determineUser(ServerHttpRequest request,
+                                          WebSocketHandler wsHandler,
+                                          Map<String, Object> attributes) {
+            String authId = UriComponentsBuilder.fromUri(request.getURI())
+                    .build().getQueryParams().getFirst("authId");
 
-        URI uri = request.getURI();
-        MultiValueMap<String, String> params = UriComponentsBuilder.fromUri(uri).build().getQueryParams();
-        String authId = params.getFirst("authId");
+            if (authId == null) {
+                System.out.println("Handshake failed: authId is null");
+                return null;
+            }
 
-        if (authId == null || authId.isBlank()) {
-            return null;
+            System.out.println("Handshake success for user: " + authId);
+            return () -> authId; // Prosta implementacja Principal przez lambdę
         }
-
-        return new UserPrincipal(authId);
-    }
 }

@@ -32,7 +32,6 @@ public class JwtService {
 
             claims.put("userId", user.getId());
 
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())

@@ -26,13 +26,22 @@ public class JwtAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String token = getToken(exchange.getRequest());
+        String path = exchange.getRequest().getPath().value();
+        String token;
 
+        if (path.contains("/ws")) {
+            token = exchange.getRequest().getQueryParams().getFirst("token");
+            System.out.println("token: " + token);
+        } else {
+            token = getToken(exchange.getRequest());
+        }
         if (token != null && jwtService.validateToken(token)) {
             String username = jwtService.extractUserName(token);
             Authentication auth = new UsernamePasswordAuthenticationToken(
                     username, null, List.of());
             exchange.getRequest().getHeaders().set("X-AuthId-Header", jwtService.extractUserId(token));
+            System.out.println(exchange.getRequest().getHeaders().get("X-AuthId-Header"));
+//            exchange.getRequest().getHeaders().set("X-AuthUserName-Header", username);
             return chain.filter(exchange).contextWrite(
                     ReactiveSecurityContextHolder.withAuthentication(auth));
         }
@@ -47,6 +56,7 @@ public class JwtAuthenticationFilter implements WebFilter {
         }
         return null;
     }
+
 
 
 }

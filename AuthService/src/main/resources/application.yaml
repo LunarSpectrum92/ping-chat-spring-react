@@ -15,6 +15,7 @@ spring:
 
 jwt:
   secret: 3282657c9b0575268776988029b05632e480fc4ec34080c229e06ff708cdb980
+  refreshExpirationMs: 86400000
 
 
 server:

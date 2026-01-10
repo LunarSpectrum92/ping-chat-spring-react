@@ -58,4 +58,5 @@ public class JwtService {
         Claims claims = extractAllClaims(token);
         return claims.get("userId").toString();
     }
+
 }

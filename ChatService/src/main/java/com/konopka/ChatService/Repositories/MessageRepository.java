@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
 
-    List<Message> findAllByConversationId(Long conversationId);
+    List<Message> findAllByConversationId(String conversationId);
 
 }

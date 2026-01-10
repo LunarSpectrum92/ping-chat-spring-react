@@ -1,14 +1,13 @@
 package com.konopka.ChatService.Controllers;
 
 
+import com.konopka.ChatService.Dto.UserAuthIdChatHistory;
 import com.konopka.ChatService.Entites.Message;
 import com.konopka.ChatService.Pojo.ChatMessage;
 import com.konopka.ChatService.Services.MessageService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,9 +21,14 @@ public class MessageController {
     }
 
 
-    @GetMapping("/conversation/{conversationId}")
-    public List<Message> getConversation(@PathVariable("conversationId") Long conversationId){
-        return messageService.findAllMessagesForConversationId(conversationId);
+    @GetMapping("/conversation/{userAuthId}")
+    public List<Message> getConversation(@PathVariable String userAuthId, Principal principal) {
+        return messageService.findAllMessagesForConversationId(userAuthId, principal.getName());
+    }
+
+    @GetMapping("/test")
+    public boolean test(){
+        return true;
     }
 
 

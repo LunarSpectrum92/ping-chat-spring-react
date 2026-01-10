@@ -1,58 +1,66 @@
-spring:
-  application:
-    name: ApiGetaway
+  spring:
+    application:
+      name: ApiGetaway
 
 
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: auth-service
-              uri: http://localhost:8081
-              predicates:
-                - Path=/auth/**
-##          filters:
-##            - StripPrefix=1
-            - id: user-service
-              uri: http://localhost:8082
-              predicates:
-                - Path=/user/**
-##          filters:
-##            - StripPrefix=1
-##            - name: RequestRateLimiter
-##              args:
-##                redis-rate-limiter.replenishRate: 10
-##                redis-rate-limiter.burstCapacity: 20
-##                key-resolver: "#{@ipKeyResolver}"
-##        - id: auth-service
-##          uri: http://localhost:8083
-##          predicates:
-##            - Path=/api/auth/**
-##          filters:
-##            - StripPrefix=1
-#      globalcors:
-#        corsConfigurations:
-#          '[/**]':
-##            allowedOrigins: "http://localhost:3000"
-#            allowedMethods:
-#              - GET
-#              - POST
-#              - PUT
-#              - DELETE
-#            allowedHeaders: "*"
-#            allowCredentials: true
-#
+    cloud:
+      gateway:
+        server:
+          webflux:
+            routes:
+              - id: auth-service
+                uri: http://localhost:8081
+                predicates:
+                  - Path=/auth/**
+              - id: user-service
+                uri: http://localhost:8082
+                predicates:
+                  - Path=/user/**
+              - id: chat-service
+                uri: http://localhost:8083
+                predicates:
+                  - Path=/message/**
+              - id: chat-websocket
+                uri: http://localhost:8083
+                predicates:
+                    - Path=/ws/**
+            default-filters:
+              - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+  ##          filters:
+  ##            - StripPrefix=1
+  ##            - name: RequestRateLimiter
+  ##              args:
+  ##                redis-rate-limiter.replenishRate: 10
+  ##                redis-rate-limiter.burstCapacity: 20
+  ##                key-resolver: "#{@ipKeyResolver}"
+  ##        - id: auth-service
+  ##          uri: http://localhost:8083
+  ##          predicates:
+  ##            - Path=/api/auth/**
+  ##          filters:
+  ##            - StripPrefix=1
+  #      globalcors:
+  #        corsConfigurations:
+  #          '[/**]':
+  ##            allowedOrigins: "http://localhost:3000"
+  #            allowedMethods:
+  #              - GET
+  #              - POST
+  #              - PUT
+  #              - DELETE
+  #            allowedHeaders: "*"
+  #            allowCredentials: true
+  #
 
 
-#  logging:
-#    level:
-#      org.springframework.cloud.gateway: DEBUG
-#      reactor.netty.http.client: INFO
+  #  logging:
+  #    level:
+  #      org.springframework.cloud.gateway: DEBUG
+  #      reactor.netty.http.client: INFO
 
-jwt:
-  secret: 3282657c9b0575268776988029b05632e480fc4ec34080c229e06ff708cdb980
+  jwt:
+    secret: 3282657c9b0575268776988029b05632e480fc4ec34080c229e06ff708cdb980
 
 
-server:
-  port: 8080
+  server:
+    port: 8080

@@ -32,12 +32,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         requests -> requests
-                                .requestMatchers("/auth/login", "/auth/register").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(jwtAuthenticatonFilter,
-//                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -46,15 +44,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(14);
     }
 
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        return daoAuthenticationProvider;
-//    }
-//
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

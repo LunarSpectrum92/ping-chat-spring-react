@@ -5,6 +5,8 @@ import com.konopka.ChatService.Pojo.ChatMessage;
 import com.konopka.ChatService.Repositories.MessageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -17,20 +19,29 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public List<Message> findAllMessagesForConversationId(Long conversationId) {
+
+    public List<Message> findAllMessagesForConversationId(String firstUserUsername, String secoundUserUsername) {
+        final String conversationId = generateConversationId(firstUserUsername, secoundUserUsername);
+        System.out.println(conversationId);
         return messageRepository.findAllByConversationId(conversationId);
     }
 
-    public Message save(ChatMessage chatMessage, String senderUsername) {
+    public Message save(ChatMessage chatMessage, String senderUsername, String conversatinId) {
         Message message = Message.builder()
                 .content(chatMessage.getContent())
                 .recipient(chatMessage.getRecipient())
-                .ConversationId(chatMessage.getConversationId())
+                .conversationId(conversatinId)
                 .sender(senderUsername)
                 .build();
 
+        System.out.println(message);
         return messageRepository.save(message);
     }
 
+    public String generateConversationId(String u1, String u2) {
+        List<String> ids = Arrays.asList(u1, u2);
+        Collections.sort(ids);
+        return ids.get(0) + "_" + ids.get(1);
+    }
 
 }
