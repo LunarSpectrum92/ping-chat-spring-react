@@ -9,14 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InvitationRepostitory extends JpaRepository<Invitation,Integer> {
+public interface InvitationRepostitory extends JpaRepository<Invitation, Integer> {
 
     List<Invitation> findBySender(User sender);
 
     List<Invitation> findByReceiver(User receiver);
 
     Optional<Invitation> findBySender_IdAndReceiver_Id(Integer senderId, Integer reciverId);
-
-
 
 }

@@ -1,8 +1,6 @@
 package com.konopka.UserService.Controllers;
 
 import com.konopka.UserService.Dto.UserDto;
-import com.konopka.UserService.Entities.User;
-import com.konopka.UserService.Repositories.UserRepository;
 import com.konopka.UserService.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,16 +36,15 @@ public class UserController {
     //find all users
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getAllUsers(Principal principal) {
-        return userService.getAllUsers(Integer.valueOf(principal.getName()));
+        return userService.getAllUsersExceptSelf(Integer.valueOf(principal.getName()));
     }
+
     //chat field
-        //find friends
+    //find friends
     @GetMapping("/friends")
     public ResponseEntity<List<UserDto>> getFriends(Principal principal) {
         return userService.getFriends(Integer.parseInt(principal.getName()));
     }
-        //find friend
-
 
 
 }

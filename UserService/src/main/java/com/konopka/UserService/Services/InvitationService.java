@@ -27,84 +27,65 @@ public class InvitationService {
     }
 
 
-    //TODO
-    //sendInvitation
-    //acceptInvitation
-    //getInvitations
-    //rejectInvitation
-
-    public ResponseEntity<InvitationDto> sendInvitation(InvitationDto invitationDto, Integer SenderId,Integer reciverId) {
-        if(invitationDto.senderId() == invitationDto.reciverId()){
+    public ResponseEntity<InvitationDto> sendInvitation(InvitationDto invitationDto, Integer SenderId, Integer reciverId) {
+        if (invitationDto.senderId() == invitationDto.reciverId()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(userService.areFriends(SenderId, reciverId)) {
+        if (userService.areFriends(SenderId, reciverId)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Optional<Invitation> invitation = invitationRepository.findBySender_IdAndReceiver_Id(invitationDto.senderId(), invitationDto.reciverId());
-        if(invitation.isPresent() ) {
+        if (invitation.isPresent()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         System.out.println("invitationDto.senderId" + invitationDto.senderId());
         System.out.println("invitationDto.reciverId" + invitationDto.reciverId());
-        Invitation invitationToSave = Invitation.builder()
-                .sender(userService.getUserById(invitationDto.senderId()))
-                .receiver(userService.getUserById(invitationDto.reciverId()))
-                .build();
+        Invitation invitationToSave = Invitation.builder().sender(userService.getUserById(invitationDto.senderId())).receiver(userService.getUserById(invitationDto.reciverId())).build();
         invitationRepository.save(invitationToSave);
         return ResponseEntity.ok(invitationDto);
     }
 
     @Transactional
     public ResponseEntity<InvitationDto> acceptInvitation(InvitationDto invitationDto) {
-        return invitationRepository.findBySender_IdAndReceiver_Id(invitationDto.senderId(), invitationDto.reciverId())
-                .map(invitation -> {
-                    userService.addFriend(invitationDto);
-                    invitationRepository.delete(invitation);
-                    return ResponseEntity.ok(invitationDto);
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return invitationRepository.findBySender_IdAndReceiver_Id(invitationDto.senderId(), invitationDto.reciverId()).map(invitation -> {
+            userService.addFriend(invitationDto);
+            invitationRepository.delete(invitation);
+            return ResponseEntity.ok(invitationDto);
+        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     public ResponseEntity<InvitationDto> declineInvitation(InvitationDto invitationDto) {
-        return invitationRepository.findBySender_IdAndReceiver_Id(invitationDto.senderId(), invitationDto.reciverId())
-                .map(invitation -> {
-                    invitationRepository.delete(invitation);
-                    return ResponseEntity.ok(invitationDto);
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return invitationRepository.findBySender_IdAndReceiver_Id(invitationDto.senderId(), invitationDto.reciverId()).map(invitation -> {
+            invitationRepository.delete(invitation);
+            return ResponseEntity.ok(invitationDto);
+        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 
     public ResponseEntity<List<UserDto>> GetInvitations(Integer userId) {
-        var user  = userService.getUserById(userId);
+        var user = userService.getUserById(userId);
         var invitations = invitationRepository.findByReceiver(user);
-        if(invitations.isEmpty()) {
+        if (invitations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         var list = new ArrayList<UserDto>();
-        for(var invitation : invitations) {
-            UserDto userDto = new UserDto(
-                    invitation.getSender().getAuthId(),
-                    invitation.getSender().getFirstName(),
-                    invitation.getSender().getLastName()
-                    );
+        for (var invitation : invitations) {
+            UserDto userDto = new UserDto(invitation.getSender().getAuthId(), invitation.getSender().getFirstName(), invitation.getSender().getLastName());
             list.add(userDto);
         }
         return ResponseEntity.ok(list);
     }
 
 
-
     public boolean doesInvitationExist(Integer senderId, Integer reciverId) {
-        if(senderId == null || reciverId == null) {
+        if (senderId == null || reciverId == null) {
             return false;
         }
         var invitation = invitationRepository.findBySender_IdAndReceiver_Id(senderId, reciverId);
         var invitation2 = invitationRepository.findBySender_IdAndReceiver_Id(reciverId, senderId);
         return invitation.isEmpty() && invitation2.isEmpty();
     }
-
 
 
 }

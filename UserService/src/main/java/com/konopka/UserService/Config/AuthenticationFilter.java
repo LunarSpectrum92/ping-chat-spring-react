@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Enumeration;
+
 
 @Component
 public class AuthenticationFilter implements Filter {
@@ -20,12 +20,20 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        String path = httpRequest.getServletPath();
+
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String customHeader = httpRequest.getHeader("X-AuthId-Header");
         System.out.println("customHeader: " + customHeader);
-        if (customHeader == null || customHeader.isBlank()) {
+        if ((customHeader == null || customHeader.isBlank())) {
             httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 customHeader,
                 null,

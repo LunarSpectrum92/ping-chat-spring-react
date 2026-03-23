@@ -1,12 +1,10 @@
 package com.konopka.UserService.Entities;
 
-import com.konopka.UserService.Dto.UserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +37,6 @@ public class User {
 
     @OneToMany(mappedBy = "receiver", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Invitation> receivedInvitations = new ArrayList<>();
-
 
 
     public void addFriend(User user) {

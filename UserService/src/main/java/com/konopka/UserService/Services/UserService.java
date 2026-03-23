@@ -5,7 +5,6 @@ import com.konopka.UserService.Dto.InvitationDto;
 import com.konopka.UserService.Dto.UserDto;
 import com.konopka.UserService.Entities.Invitation;
 import com.konopka.UserService.Entities.User;
-import com.konopka.UserService.Repositories.InvitationRepostitory;
 import com.konopka.UserService.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,11 +27,9 @@ public class UserService {
     }
 
 
-
-
     public ResponseEntity<UserDto> CreateUser(UserDto userDto) {
 
-        if(userRepository.findByAuthId(userDto.AuthId()).isPresent()) {
+        if (userRepository.findByAuthId(userDto.AuthId()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
@@ -42,19 +39,13 @@ public class UserService {
                 .lastName(userDto.lastName())
                 .build();
 
-        try {
-            userRepository.save(user);
-        }catch (Exception e) {
-            throw new RuntimeException("Problem while saving user: " + e.getMessage());
-        }
-
+        userRepository.save(user);
         return ResponseEntity.ok(userDto);
     }
 
 
-
     public ResponseEntity<UserDto> AddFriend(UserDto userDto) {
-        if(userRepository.findByAuthId(userDto.AuthId()).isEmpty()) {
+        if (userRepository.findByAuthId(userDto.AuthId()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
         return ResponseEntity.ok(userDto);
@@ -62,42 +53,29 @@ public class UserService {
 
     public Integer getUserIdByAuthId(Integer authId) {
         var user = userRepository.findByAuthId(authId);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         return user.get().getId();
     }
 
-    public ResponseEntity<UserDto> getUser(int authId) {
-        var user = userRepository.findByAuthId(authId);
-        UserDto userDto = new UserDto(user.get().getAuthId(), user.get().getFirstName(), user.get().getLastName());
-        if(user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return ResponseEntity.ok(userDto);
-    }
-
-
     public User getUserById(int userId) {
-        System.out.println("getUserById" + userId);
         var user = userRepository.findById(userId);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
         return user.get();
     }
 
-//    @Transactional
-//    public ResponseEntity<InvitationDto> addFriend(InvitationDto invitationDto) {
-//        Optional<User> sender = userRepository.findById(invitationDto.senderId());
-//        Optional<User> receiver = userRepository.findById(invitationDto.reciverId());
-//        if(sender.isEmpty() || receiver.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//        sender.get().addFriend(receiver.get());
-//        userRepository.save(sender.get());
-//        return ResponseEntity.ok(invitationDto);
-//    }
+
+    public ResponseEntity<UserDto> getUser(int authId) {
+        var user = userRepository.findByAuthId(authId);
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        UserDto userDto = new UserDto(user.get().getAuthId(), user.get().getFirstName(), user.get().getLastName());
+        return ResponseEntity.ok(userDto);
+    }
 
 
     @Transactional
@@ -118,17 +96,17 @@ public class UserService {
 
     public Boolean areFriends(Integer u1, Integer u2) {
         var user = userRepository.findByAuthId(u1);
-        return user.get().getFriends().stream().anyMatch(f -> f.getId() == u2);
+        return user.map(value -> value.getFriends().stream().anyMatch(f -> f.getId() == u2)).orElse(false);
     }
 
     public ResponseEntity<List<UserDto>> getFriends(int authId) {
         Optional<User> user = userRepository.findByAuthId(authId);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         List<User> friends = user.get().getFriends();
         List<UserDto> userDtos = new ArrayList<>();
-        for(User u :  friends) {
+        for (User u : friends) {
             userDtos.add(new UserDto(u.getAuthId(), u.getFirstName(), u.getLastName()));
         }
         return ResponseEntity.ok(userDtos);
@@ -138,7 +116,7 @@ public class UserService {
     public ResponseEntity<List<Invitation>> getReceivedInvitations(int AuthId) {
 
         var user = userRepository.findByAuthId(AuthId);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         List<Invitation> invitations = user.get().getReceivedInvitations();
@@ -147,15 +125,14 @@ public class UserService {
     }
 
 
-
-    public ResponseEntity<List<UserDto>> getAllUsers(Integer authId) {
+    public ResponseEntity<List<UserDto>> getAllUsersExceptSelf(Integer authId) {
         List<User> users = userRepository.findAllByAuthIdNot(authId);
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         List<UserDto> userDtos = new ArrayList<>();
-        for(User u :  users) {
-            if(areFriends(u.getAuthId(), authId)) {
+        for (User u : users) {
+            if (areFriends(u.getAuthId(), authId)) {
                 continue;
             }
             userDtos.add(new UserDto(u.getAuthId(), u.getFirstName(), u.getLastName()));

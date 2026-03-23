@@ -45,7 +45,7 @@ public class InvitationController {
     }
 
     @GetMapping("/invitations")
-    public List<UserDto> getInvitations(Principal principal){
+    public List<UserDto> getInvitations(Principal principal) {
         var userId = userService.getUserIdByAuthId(Integer.parseInt(principal.getName()));
         return invitationService.GetInvitations(userId).getBody();
     }
