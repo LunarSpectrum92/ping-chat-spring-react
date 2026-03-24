@@ -23,7 +23,7 @@ const NavBar = ({ children }) => {
                     <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l12 0" /></svg>
                     </label>
-                    <div className="px-4 font-bold">App Name</div>
+                    <div className="px-4 font-bold">Ping</div>
                 </nav>
                 <div className="flex-1 min-h-0 overflow-hidden">{children}</div>
             </div>
