@@ -5,16 +5,16 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5433/AuthDb
-    username: admin
-    password: admin
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/AuthDb
+    username: ${POSTGRE_USERNAME}
+    password: ${POSTGRE_PASSWORD}
     driverClassName: org.postgresql.Driver
 
 
 jwt:
-  secret: 3282657c9b0575268776988029b05632e480fc4ec34080c229e06ff708cdb980
+  secret: ${JWT_SECRET}
   refreshExpirationMs: 86400000
 
 

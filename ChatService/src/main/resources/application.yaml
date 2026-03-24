@@ -6,7 +6,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://admin:admin@localhost:27017/mongodb_chat_db?authSource=admin
+      uri: mongodb://${MONGO_DB_USER:admin}:${MONGO_DB_PASSWORD:admin}@${DB_HOST:localhost}:27017/mongodb_chat_db?authSource=admin
 #      password: admin
 #      username: admin
 #      authentication-database: admin

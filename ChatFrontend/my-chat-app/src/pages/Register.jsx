@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { authPublic } from "../api/auth.js";
-import Navbar from "../components/NavBar.jsx";
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
   const [username, setUserName] = useState("");
@@ -12,6 +11,9 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -24,7 +26,7 @@ const Register = () => {
     setLoading(true);
     try {
       await RegisterUser({ username, password, firstName, lastName });
-      // You might want to navigate to login here: navigate("/login");
+      navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed, please try again later");
     } finally {

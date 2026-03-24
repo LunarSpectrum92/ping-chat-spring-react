@@ -63,7 +63,6 @@ public class RefreshTokenService {
         if (refreshToken == null || refreshToken.isBlank()) {
             return ResponseEntity.badRequest().body("Refresh token is required.");
         }
-
         return refreshTokenRepository.findByToken(refreshToken)
                 .map(token -> {
                     refreshTokenRepository.delete(token);
@@ -87,7 +86,5 @@ public class RefreshTokenService {
     public Boolean isTokenValid(Optional<User> user) {
         return user.filter(value -> refreshTokenRepository.findByUser(value).isPresent()).isPresent();
     }
-
-
 
 }

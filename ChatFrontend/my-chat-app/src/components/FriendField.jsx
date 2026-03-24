@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import usePrivateAxios from "../hooks/usePrivateAxios";
 import useAuth from "../hooks/useAuth";
 
-const UserField = ({ firstName, lastName, AuthId, onClick }) => {
+const UserField = ({ firstName, lastName, AuthId, onClick, isActive }) => {
     const initials = `${firstName[0]}${lastName[0]}`;
 
     const bgVariants = ['bg-error', 'bg-error-content', 'bg-base-200', 'bg-success-content', 'bg-info-content'];
     const randomBg = bgVariants[firstName.length % bgVariants.length];
+    const bgColor = isActive ? "bg-base-300" : "bg-base-100";
+
 
 
 
@@ -15,7 +17,7 @@ const UserField = ({ firstName, lastName, AuthId, onClick }) => {
             onClick={onClick}
             className="flex justify-center w-full px-4 my-2 cursor-pointer transition-all active:scale-[0.98]"
         >
-            <div className="card card-side bg-base-100 shadow-xl border border-base-200 w-full max-w-lg overflow-hidden flex-col sm:flex-row hover:bg-base-200 transition-colors">
+            <div className={`card card-side ${bgColor} shadow-xl  w-full max-w-lg overflow-hidden flex-col sm:flex-row hover:bg-base-200 transition-colors`}>
 
                 <div className="card-body flex-row items-center gap-4 p-4 sm:p-6">
 

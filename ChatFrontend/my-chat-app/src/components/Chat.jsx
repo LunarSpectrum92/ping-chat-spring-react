@@ -14,7 +14,14 @@ const Chat = ({ messages, currentFriendId, friend }) => {
     const [inputValue, setInputValue] = useState("");
     const [finalMessages, setFinalMessages] = useState([]);
     const stompClientRef = useRef(null);
+    const messagesEndRef = useRef(null);
 
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+        }
+    }, [finalMessages]);
 
     useEffect(() => {
         setFinalMessages(messages || []);
@@ -31,8 +38,6 @@ const Chat = ({ messages, currentFriendId, friend }) => {
         // }
 
         const client = new Client({
-            //tutaj coś trzeba zmienić
-
             webSocketFactory: () => new SockJS(`http://localhost:8080/ws?authId=${auth.AuthId}&token=${auth.accessToken}`),
             connectHeaders: {
                 Authorization: `Bearer ${auth.accessToken}`,
@@ -120,13 +125,13 @@ const Chat = ({ messages, currentFriendId, friend }) => {
 
 
         if (!currentFriendId) {
-            return <div className="p-10 text-center">Wybierz znajomego, aby rozpocząć rozmowę</div>;
+            return <div className="p-10 text-center">choose friend, to start conversation</div>;
         }
 
-
+    // overflow-hidden
     return (
-        <div className="flex flex-col h-full min-h-0 bg-base-100">
-            <div className="flex-1 min-h-0 overflow-y-auto p-4">
+        <div className="flex flex-col h-[calc(100vh-115px)] md:h-[calc(100vh-80px)] lg:h-[calc(100vh-64px)] bg-base-100">
+            <div className="flex-1 min-h-0 overflow-y-auto p-4" ref={messagesEndRef}>
             {finalMessages.length > 0 ? (
                 finalMessages.map((msg) => (
                     msg.sender == currentFriendId ?
@@ -137,20 +142,20 @@ const Chat = ({ messages, currentFriendId, friend }) => {
             ) : (
                 <div className="text-center opacity-50">Brak wiadomości. Przywitaj się!</div>
             )}
+                <div ref={messagesEndRef}></div>
 
         </div>
-            <div className="p-4 border-t border-base-300 bg-base-100 flex-none">
+            <div className="p-4 border-t border-base-300 bg-base-100 flex-none sticky bottom-0">
                 <form className="max-w-[800px] mx-auto flex gap-2" onSubmit={sendPrivateMessage}>
                     <input
                         type="text"
-                        placeholder="Napisz wiadomość..."
                         placeholder="Napisz wiadomość..."
                         className="input input-bordered flex-grow"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         required
                     />
-                    <button className="btn btn-primary btn-square" type="submit">
+                    <button className="btn btn-primary btn-square" type="submit" onClick = {() => {scroll}}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>

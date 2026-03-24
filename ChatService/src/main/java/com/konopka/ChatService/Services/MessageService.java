@@ -22,7 +22,6 @@ public class MessageService {
 
     public List<Message> findAllMessagesForConversationId(String firstUserUsername, String secoundUserUsername) {
         final String conversationId = generateConversationId(firstUserUsername, secoundUserUsername);
-        System.out.println(conversationId);
         return messageRepository.findAllByConversationId(conversationId);
     }
 
@@ -34,7 +33,6 @@ public class MessageService {
                 .sender(senderUsername)
                 .build();
 
-        System.out.println(message);
         return messageRepository.save(message);
     }
 

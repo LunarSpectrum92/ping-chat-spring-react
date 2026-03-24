@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "UserService",
-        url = "http://localhost:8082/user")
+        url = "http://${USER_HOST:localhost}:8082/user"
+)
 public interface UserFeign {
 
     @PostMapping("/create")

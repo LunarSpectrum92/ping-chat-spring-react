@@ -22,9 +22,9 @@ public class AuthController{
     private final UserService userService;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthController(UserService userService, RefreshTokenRepository refreshTokenRepository, RefreshTokenService refreshTokenService, RefreshTokenService refreshTokenService1) {
+    public AuthController(UserService userService, RefreshTokenService refreshTokenService) {
         this.userService = userService;
-        this.refreshTokenService = refreshTokenService1;
+        this.refreshTokenService = refreshTokenService;
     }
 
 
@@ -43,7 +43,6 @@ public class AuthController{
         var responseUserDto = new ResponseUserDto(tokens.accessToken(), tokens.AuthId());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                //tokens.accessToken()
                 .body(responseUserDto);
     }
 

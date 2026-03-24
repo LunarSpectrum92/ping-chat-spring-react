@@ -29,18 +29,9 @@ public class ChatController {
 
 
     @MessageMapping("/private-message")
-    public ChatMessage handlePrivateMessage(
-            @Payload ChatMessage message,
-            Principal principal
-    ) {
+    public ChatMessage handlePrivateMessage(@Payload ChatMessage message, Principal principal) {
         return chatService.sendPrivateMessage(message, principal);
     }
-
-
-//    @GetMapping("/test")
-//    public static String test(){
-//        return "test";
-//    }
 
 
 }

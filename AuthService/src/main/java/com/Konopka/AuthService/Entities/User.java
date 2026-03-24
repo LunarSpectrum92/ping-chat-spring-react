@@ -4,7 +4,6 @@ package com.Konopka.AuthService.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
 
 @Entity
 @Table(name = "users")

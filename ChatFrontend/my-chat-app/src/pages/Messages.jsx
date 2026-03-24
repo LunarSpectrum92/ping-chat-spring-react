@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar.jsx";
 import { useEffect, useState } from "react";
 import usePrivateAxios from "../hooks/usePrivateAxios.jsx";
 import FriendField from "../components/FriendField.jsx";
@@ -29,10 +29,12 @@ const Messages = () => {
     const HandleClick = async (friend) => {
         try {
             console.log(friend.AuthId);
+
             const messFetch = await axiosPrivate.get(`/message/conversation/${friend.AuthId}`);
             setMessages(messFetch.data);
             setFriendForBubble(friend)
             setCurrentFriendId(friend.AuthId);
+            setLastFriendId(friend);
             setIsClicked(true);
 
             const drawerCheckbox = document.getElementById('my-drawer');
@@ -74,6 +76,7 @@ const Messages = () => {
                                         {...friend}
                                         key={friend.id}
                                         onClick={() => HandleClick(friend)}
+                                        isActive={currentFriendId === friend.AuthId}
                                     />
                                 ))
                             ) : (

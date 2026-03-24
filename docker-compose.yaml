@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   postgres_user:
@@ -45,6 +44,91 @@ services:
       - chat_data:/data/db
     networks:
       - app_network
+
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Docker/AuthService/Dockerfile
+    environment:
+      - DB_HOST=postgres_auth
+      - USER_HOST=user-service
+      - DB_PORT=5432
+    ports:
+      - "8081:8081"
+    networks:
+      - app_network
+    depends_on:
+      postgres_auth:
+        condition: service_started
+
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Docker/UserService/Dockerfile
+    environment:
+      - DB_HOST=postgres_user
+      - DB_PORT=5432
+    ports:
+      - "8082:8082"
+    networks:
+      - app_network
+    depends_on:
+      postgres_user:
+        condition: service_started
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: Docker/ChatService/Dockerfile
+    environment:
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+    ports:
+      - "8083:8083"
+    networks:
+      - app_network
+    depends_on:
+      mongodb:
+        condition: service_started
+
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Docker/ApiGetaway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - auth-service=auth-service
+      - user-service=user-service
+      - chat-service=chat-service
+      - chat-websocket=chat-websocket
+    networks:
+      - app_network
+    depends_on:
+      chat-service:
+        condition: service_started
+      user-service:
+        condition: service_started
+      auth-service:
+        condition: service_started
+
+
+  chat-frontend:
+    build:
+      context: .
+      dockerfile: Docker/ChatFrontend/Dockerfile
+    ports:
+      - "5173:80"
+    networks:
+      - app_network
+    depends_on:
+      api-gateway:
+        condition: service_started
+
+
 
 networks:
   app_network:

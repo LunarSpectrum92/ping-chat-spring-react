@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import { motion } from "framer-motion";
 import useAuth from "../hooks/useAuth";
 import { authPublic } from "../api/auth.js";
-import Navbar from "../components/Navbar";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const Login = () => {
@@ -146,7 +145,6 @@ const Login = () => {
                   </button>
                 </div>
 
-                {/* Register Link */}
                 <p className="text-center mt-4 text-sm text-base-content/70">
                   Don't have an account?{" "}
                   <Link to="/register" className="link link-primary font-semibold no-underline hover:underline">

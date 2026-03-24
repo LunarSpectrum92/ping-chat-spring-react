@@ -15,30 +15,28 @@ import java.util.Enumeration;
 public class AuthenticationFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        System.out.println(httpRequest.getServletPath() + " " + httpRequest.getHeader("X-AuthId-Header"));
 
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        // || httpRequest.getRequestURI().startsWith("/nowy_6.html") || true
-            if (httpRequest.getRequestURI().contains("/ws")) {
-                chain.doFilter(request, response);
-                return;
-            }
-        String customHeader = httpRequest.getHeader("X-AuthId-Header");
-//        String customHeaderUserName = httpRequest.getHeader("X-AuthUserName-Header");
-        System.out.println("customHeader: " + customHeader);
-        if (customHeader == null || customHeader.isBlank()) {
-            httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+        String path = httpRequest.getServletPath();
+
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+            chain.doFilter(request, response);
             return;
         }
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                customHeader,
-                null,
-                null
-        );
-        System.out.println("authentication: " + authentication);
+
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if (httpRequest.getRequestURI().contains("/ws")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        String customHeader = httpRequest.getHeader("X-AuthId-Header");
+        if (customHeader == null || customHeader.isBlank()) {
+            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        Authentication authentication = new UsernamePasswordAuthenticationToken(customHeader, null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }

@@ -26,10 +26,5 @@ public class MessageController {
         return messageService.findAllMessagesForConversationId(userAuthId, principal.getName());
     }
 
-    @GetMapping("/test")
-    public boolean test(){
-        return true;
-    }
-
 
 }
