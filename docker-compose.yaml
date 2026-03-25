@@ -101,10 +101,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - auth-service=auth-service
-      - user-service=user-service
-      - chat-service=chat-service
-      - chat-websocket=chat-websocket
+      - AUTH_SERVICE_HOST=auth-service
+      - USER_SERVICE_HOST=user-service
+      - CHAT_SERVICE_HOST=chat-service
     networks:
       - app_network
     depends_on:
