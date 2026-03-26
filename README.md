@@ -1,6 +1,6 @@
-# 💬 Ping Chat
+# Ping Chat
 
-A real-time chat application built with **Spring Boot** on the backend and **React** on the frontend, communicating over WebSockets.
+A real-time chat application built with **Spring Boot** on the backend and **React** on the frontend with microservice infrastructure, communicating over WebSockets.
 
 ---
 
@@ -77,6 +77,10 @@ cd ping-chat-spring-react
 ```
 
 ### 2. Add environment variables for backend services
+Before running the backend services, create a .env file in the service folders and provide the following variables:
+    
+    - Database Passwords and Usernames
+    - JWT secrets for api Gateway and auth service
 
 ### 3. Start Docker-compose
 
@@ -89,7 +93,7 @@ The frontend will be running at **http://localhost:5173**
 ---
 
 
-## 📡 REST API Endpoints
+## REST API Endpoints
 AuthService:
 ![img.png](assets/img.png)
 UserService:
@@ -98,46 +102,30 @@ ChatService:
 ![img_2.png](assets/img_2.png)
 ---
 
-## 🖼️ Screenshots
+## Screenshots
 
-> *Add screenshots of your app here*
+**Login page**
 
-```
-frontend/screenshots/
-├── login.png
-├── chatroom.png
-└── private-message.png
-```
+![login.png](assets/login.png)
+
+**Register page**
+
+![register.png](assets/register.png)
+
+**Chat page**
+
+![chat.png](assets/chat.png)
+
+**Users page**
+
+![users.png](assets/users.png)
+
+**Invitation page**
+
+![invitation.png](assets/invitation.png)
 
 
-## 🐳 Docker (Optional)
-
-If Docker support is included, you can spin up the full stack with:
-
-```bash
-docker-compose up --build
-```
-
-This starts:
-- MySQL database on port `3306`
-- Spring Boot backend on port `8080`
-- React frontend on port `5173`
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! To get started:
-
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and commit: `git commit -m "Add your feature"`
-4. Push to your branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request
-
----
-
-## 📄 License
+##  License
 
 This project is licensed under the [MIT License](LICENSE).
 
@@ -145,5 +133,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**LunarSpectrum92**  
+**Jarosław Konopka**  
 GitHub: [@LunarSpectrum92](https://github.com/LunarSpectrum92)
